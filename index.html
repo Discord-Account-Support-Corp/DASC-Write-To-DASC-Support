@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Collaboration</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    textarea { width: 100%; height: 400px; }
+  </style>
+</head>
+<body>
+  <h1>Collaborate on a Document</h1>
+  <textarea id="docEditor"></textarea>
+
+  <!-- Include Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <script>
+    const socket = io();
+    const editor = document.getElementById('docEditor');
+
+    // Emit events when the content of the document changes
+    editor.addEventListener('input', () => {
+      socket.emit('document-update', editor.value);
+    });
+
+    // Listen for updates from other users
+    socket.on('document-update', (content) => {
+      editor.value = content;
+    });
+  </script>
+</body>
+</html>
